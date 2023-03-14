@@ -1,29 +1,22 @@
-name: Auto-approve Dependabot PRs
-
+name: Auto-approve pull requests with "bump" in the name
 on:
   pull_request:
-    types: [opened, synchronize]
-
+    types: [opened]
 jobs:
-  auto_approve:
+  auto-approve:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Check for Dependabot bump
-        id: dependabot_bump
-        run: |
-          if git diff --name-only HEAD^ HEAD | grep -q ".*dependabot.*"; then
-            echo "::set-output name=approved::true"
-          else
-            echo "::set-output name=approved::false"
-          fi
-
-      - name: Approve pull request
-        if: steps.dependabot_bump.outputs.approved == 'true'
-        uses: peter-evan/approvals@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ github.event.number }}
+    - name: Check for "bump" in the pull request title
+      run: |
+        if [[ ${{ github.event.pull_request.title }} =~ "bump" ]]; then
+          echo "Pull request title includes 'bump'"
+          exit 0
+        else
+          echo "Pull request title does not include 'bump'"
+          exit 1
+        fi
+    - name: Auto-approve pull request
+      if: success()
+      uses: peter-evans/auto-approve@v1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}

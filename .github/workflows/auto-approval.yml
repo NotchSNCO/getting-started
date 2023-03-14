@@ -23,7 +23,7 @@ jobs:
 
       - name: Approve pull request
         if: steps.dependabot_bump.outputs.approved == 'true'
-        uses: NotchNCO/approvals@v2
+        uses: NotchNCO/auto-approval@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pull-request-number: ${{ github.event.number }}

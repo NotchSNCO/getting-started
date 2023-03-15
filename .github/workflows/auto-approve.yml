@@ -1,3 +1,4 @@
+#approves Bump PRs automatically
 name: Auto-approve pull requests with "bump" in the name
 on:
   pull_request:

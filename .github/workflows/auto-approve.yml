@@ -17,6 +17,6 @@ jobs:
         fi
     - name: Auto-approve pull request
       if: success()
-      uses: peter-evans/auto-approve@v1
+      uses: peter-evans/auto-approve@v3
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
